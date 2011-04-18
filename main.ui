@@ -55,6 +55,7 @@
             <property name="can_focus">False</property>
             <property name="n_rows">3</property>
             <property name="n_columns">3</property>
+            <property name="row_spacing">3</property>
             <child>
               <placeholder/>
             </child>

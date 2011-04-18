@@ -27,6 +27,7 @@ class Creeper.MainWindow {
 		add_activity (new Activity ("Google Chrome", 50000));
 		add_activity (new Activity ("Epiphany web browser", 25000));
 		add_activity (new Activity ("Emacs", 10000));
+
 	}
 
 	public bool add_activity (Activity a) {
@@ -37,6 +38,13 @@ class Creeper.MainWindow {
 
 	public void run () {
 		window.show_all ();
+
+		var screen = window.get_screen ();
+		foreach (Gdk.Window w in screen.get_window_stack ()) {
+			if (w is Gtk.Window) {
+				debug ("We have a Gtk.Window ");
+			}
+		}
 		Gtk.main ();
 	}
 

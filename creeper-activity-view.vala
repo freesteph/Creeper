@@ -38,7 +38,7 @@ class Creeper.ActivitiesView : Gtk.Table {
 
 		/* progress bar and percentage */
 		var area   = new Gtk.DrawingArea ();
-		var label  = new Gtk.Label (@"$(a.percentage*100)");
+		var label  = new Gtk.Label (@"$(a.percentage*100)%");
 
 		/* attach them all */
 		table.attach (app_box, 0, 1, activities.size, activities.size+1,
@@ -63,7 +63,8 @@ class Creeper.ActivitiesView : Gtk.Table {
 		int h = widget.get_allocated_height ();
 
 		int radius = w / 40;
-		cr.set_source_rgb (0.3, 0.3, 0.3);
+		cr.set_source_rgb (0.5, 0.5, 0.5);
+		cr.move_to  (0, 0);
 		cr.line_to  (w*a.percentage - radius, 0);
 		cr.curve_to (w*a.percentage - radius, 0,
 					 w*a.percentage, 0,
@@ -74,7 +75,9 @@ class Creeper.ActivitiesView : Gtk.Table {
 					 w*a.percentage - radius, h);
 		cr.line_to  (0, h);
 		cr.line_to  (0, 0);
-		cr.fill ();
+		cr.fill_preserve ();
+		cr.set_source_rgb (0.3, 0.3, 0.3);
+		cr.stroke ();
 	 	return false;
 	 }
 }
