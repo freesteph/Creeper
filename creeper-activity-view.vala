@@ -1,21 +1,18 @@
 
-class Creeper.ActivitiesView : Gtk.Table {
+class Creeper.ActivitiesView {
 
 	private Gtk.Table table;
 
-	private Gee.ArrayList<Activity> activities;
-
 	public ActivitiesView (Gtk.Table t) {
 		table = t;
-		activities = new Gee.ArrayList<Activity> ();
 	}
 
-	public void add_activity (Activity a) {
-		activities.add (a);
-		render_row (a);
+	public void resize (int rows, int columns) {
+		table.resize (rows, columns);
 	}
 
-	public void render_row (Activity a) {
+	public void render_row (Activity a, int index) {
+
 		var iconset = new Gtk.IconTheme ();
 		iconset.get_default ();
 		Gdk.Pixbuf pix = null;
@@ -41,15 +38,15 @@ class Creeper.ActivitiesView : Gtk.Table {
 		var label  = new Gtk.Label (@"$(a.percentage*100)%");
 
 		/* attach them all */
-		table.attach (app_box, 0, 1, activities.size, activities.size+1,
+		table.attach (app_box, 0, 1, index, index+1,
 					  Gtk.AttachOptions.FILL | Gtk.AttachOptions.SHRINK,
 					  Gtk.AttachOptions.SHRINK,
 					  12, 12);
-		table.attach (area, 1, 2, activities.size, activities.size+1,
+		table.attach (area, 1, 2, index, index+1,
 					  Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL,
 					  Gtk.AttachOptions.FILL,
 					  0, 12);
-		table.attach (label, 2, 3, activities.size, activities.size+1,
+		table.attach (label, 2, 3, index, index+1,
 					  Gtk.AttachOptions.SHRINK,
 					  Gtk.AttachOptions.SHRINK,
 					  12, 12);
@@ -85,4 +82,9 @@ class Creeper.ActivitiesView : Gtk.Table {
 		cr.stroke ();
 	 	return false;
 	 }
+
+	public void remove_all () {
+		table.foreach ( (w) => { table.remove (w); });
+		assert (table.get_children ().first () == null);
+	}
 }

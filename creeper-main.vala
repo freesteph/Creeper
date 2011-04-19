@@ -1,14 +1,22 @@
+using Wnck;
 using Gee;
 using Gtk;
 
 class Creeper.MainWindow {
 
+	private Gtk.Builder builder;
 	private Gtk.Window window;
 	private Gtk.Toolbar toolbar;
+	private Wnck.Screen screen;
 	private Creeper.ActivitiesView view;
 
+	private Activity current_activity;
+	private Gee.ArrayList<Activity> activities;
+
 	public MainWindow () {
-		var builder = new Gtk.Builder ();
+		activities = new Gee.ArrayList<Activity> ();
+
+		builder = new Gtk.Builder ();
 		try {
 			builder.add_from_file ("main.ui");
 		} catch (Error e) {
@@ -24,21 +32,76 @@ class Creeper.MainWindow {
 
 		Activity.time = 100000;
 
-		add_activity (new Activity ("Google Chrome", 50000));
-		add_activity (new Activity ("Epiphany web browser", 25000));
-		add_activity (new Activity ("Emacs", 10000));
+		activities.add (new Activity ("Google Chrome", 50000));
+		activities.add (new Activity ("Epiphany web browser", 25000));
+		activities.add (new Activity ("Emacs", 10000));
 
+		screen = Wnck.Screen.get_default ();
+		screen.active_window_changed.connect ( (screen, previous) =>
+			{
+				// stop previous activity
+				if (current_activity != null) {
+					debug ("Pausing previous activity");
+					current_activity.pause ();
+				}
+				// get current application
+				var win = screen.get_active_window ();
+				if (win == null) return;
+
+				var app = win.get_application ();
+
+				// do I have to do this stupid scholar code?
+				bool found = false; int i = 0;
+				while (i < activities.size && !found) {
+					var a = activities.get (i);
+					if (a.name == app.get_name ()) {
+						current_activity = a;
+						found = true;
+					}
+					i++;
+				}
+
+				if (i >= activities.size) {
+					current_activity = new Activity.from_app (app);
+					add_activity (current_activity);
+					debug (@"Created new activity: $current_activity");
+				} else {
+					current_activity = activities.get (i);
+				}
+
+				debug (@"Switched to: $current_activity");
+				current_activity.start ();
+				update_view ();
+			});
+		update_view ();
 	}
 
 	public bool add_activity (Activity a) {
-		debug ("Adding activity: " + a.name);
-		view.add_activity (a);
+		activities.add (a);
+		activities.sort ((CompareFunc)(compare_activities));
 		return true;
+	}
+
+	public static int compare_activities (Activity a, Activity b) {
+		if (a.timer.elapsed () > b.timer.elapsed ()) {
+			return 1;
+		} else if (a.timer.elapsed () < b.timer.elapsed ()) {
+			return -1;
+		} else {
+			return 0;
+		}
+	}
+
+	public void update_view () {
+		debug ("Updating the view");
+		view.resize (activities.size, 3);
+		for (int i = 0; i < activities.size; i++) {
+			view.render_row (activities.get(i), i);
+		}
 	}
 
 	public void run () {
 		window.show_all ();
-
 		var screen = window.get_screen ();
 		foreach (Gdk.Window w in screen.get_window_stack ()) {
 			if (w is Gtk.Window) {
