@@ -1,0 +1,8 @@
+= Creeper =
+
+Creeper is a simple tracking application that tells you
+how much time you spent procrastinating on other applications
+instead of doing your work.
+
+It's a pretty simple project, that will hopefully turn 
+into a GNOME tutorial. It makes use of GTK3 and libwnck (soon).
