@@ -13,19 +13,12 @@ class Creeper.ActivitiesView {
 
 	public void render_row (Activity a, int index) {
 
-		var iconset = new Gtk.IconTheme ();
-		iconset.get_default ();
-		Gdk.Pixbuf pix = null;
-		try {
-			pix = iconset.load_icon ("google-chrome", 32, 0);
-		} catch (Error e) {
-			debug ("Cannot load icon file");
-		}
+		Gdk.Pixbuf icon = a.app.get_icon ();
 
 		/* Label + icon for the application */
 		var app_box   = new Gtk.HBox (false, 0);
 		var app_label = new Gtk.Label (a.name);
-		var app_icon  = new Gtk.Image.from_pixbuf (pix);
+		var app_icon  = new Gtk.Image.from_pixbuf (icon);
 		app_label.set_alignment (1, 0);
 		app_label.xpad = 12;
 		app_label.ypad = 6;

@@ -30,8 +30,6 @@ class Creeper.MainWindow {
 		view = new ActivitiesView (table);
 		window.destroy.connect (Gtk.main_quit);
 
-		Activity.time = 100000;
-
 		screen = Wnck.Screen.get_default ();
 		screen.active_window_changed.connect ( (screen, previous) =>
 			{
@@ -100,12 +98,6 @@ class Creeper.MainWindow {
 
 	public void run () {
 		window.show_all ();
-		var screen = window.get_screen ();
-		foreach (Gdk.Window w in screen.get_window_stack ()) {
-			if (w is Gtk.Window) {
-				debug ("We have a Gtk.Window ");
-			}
-		}
 		Gtk.main ();
 	}
 
@@ -114,7 +106,6 @@ class Creeper.MainWindow {
 		app.activate.connect ( () => {
 				weak GLib.List list = app.get_windows ();
 				if (list == null) {
-					debug ("Let's run");
 					var mainwindow = new MainWindow ();
 					mainwindow.run ();
 				} else {
