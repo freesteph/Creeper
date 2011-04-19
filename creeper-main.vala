@@ -32,10 +32,6 @@ class Creeper.MainWindow {
 
 		Activity.time = 100000;
 
-		activities.add (new Activity ("Google Chrome", 50000));
-		activities.add (new Activity ("Epiphany web browser", 25000));
-		activities.add (new Activity ("Emacs", 10000));
-
 		screen = Wnck.Screen.get_default ();
 		screen.active_window_changed.connect ( (screen, previous) =>
 			{
@@ -87,7 +83,7 @@ class Creeper.MainWindow {
 			return 1;
 		} else if (a.timer.elapsed () < b.timer.elapsed ()) {
 			return -1;
-		} else {
+		} else{ 
 			return 0;
 		}
 	}
@@ -95,9 +91,11 @@ class Creeper.MainWindow {
 	public void update_view () {
 		debug ("Updating the view");
 		view.resize (activities.size, 3);
+		view.remove_all ();
 		for (int i = 0; i < activities.size; i++) {
 			view.render_row (activities.get(i), i);
 		}
+		view.refresh ();
 	}
 
 	public void run () {

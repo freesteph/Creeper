@@ -6,7 +6,8 @@ class Creeper.Activity {
 	public string command_name { get; private set; }
 	public Timer timer;
 	public static ulong time;
-	public float percentage    { get; private set; default=0.5f; }
+	public float percentage     { get; private set; default=0.5f; }
+	public Wnck.Application app { get; private set; }
 
 	public Activity (string n, ulong t) {
 		timer = new Timer ();
@@ -16,11 +17,14 @@ class Creeper.Activity {
 		debug (@"Percentage = $percentage");
 	}
 
-	public Activity.from_app (Wnck.Application app) {
+	public Activity.from_app (Wnck.Application a) {
+		app = a;
 		timer = new Timer ();
 		timer.stop ();
 		name = app.get_name ();
-		icon_name = app.get_icon_name ();
+		var winclass = app.get_windows().first() as Wnck.Window;
+		var group = winclass.get_class_group ();
+		debug ("Resource: " + group.get_res_class ());
 	}
 
 	public void start () {

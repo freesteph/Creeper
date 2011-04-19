@@ -55,6 +55,10 @@ class Creeper.ActivitiesView {
 			});
 	}
 
+	public void refresh () {
+		table.show_all ();
+	}
+
 	public bool render_progress (Gtk.Widget widget, Cairo.Context cr, Activity a) {
 		int w = widget.get_allocated_width ();
 		int h = widget.get_allocated_height ();
