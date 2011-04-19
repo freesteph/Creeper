@@ -63,18 +63,23 @@ class Creeper.ActivitiesView : Gtk.Table {
 		int h = widget.get_allocated_height ();
 
 		int radius = w / 40;
+		cr.set_line_width (1);
 		cr.set_source_rgb (0.5, 0.5, 0.5);
-		cr.move_to  (0, 0);
-		cr.line_to  (w*a.percentage - radius, 0);
-		cr.curve_to (w*a.percentage - radius, 0,
-					 w*a.percentage, 0,
-					 w*a.percentage, radius);
-		cr.line_to  (w*a.percentage, h - radius);
-		cr.curve_to (w*a.percentage, h - radius,
-					 w*a.percentage, h,
-					 w*a.percentage - radius, h);
-		cr.line_to  (0, h);
-		cr.line_to  (0, 0);
+		/* since our line-width is 1, and that cairo move_to() defines
+		   where the _center_ of the line is, we need to add an offset 
+		   of half that line-width, otherwise Cairo will eat the pixels
+		   on the side. The offset makes it use a full pixel. I think. */
+		cr.move_to  (0.5, 0);
+		cr.line_to  (0.5 + w*a.percentage - radius, 0);
+		cr.curve_to (0.5 + w*a.percentage - radius, 0,
+					 0.5 + w*a.percentage, 0,
+					 0.5 + w*a.percentage, radius);
+		cr.line_to  (0.5 + w*a.percentage, h - radius);
+		cr.curve_to (0.5 + w*a.percentage, h - radius,
+					 0.5 + w*a.percentage, h,
+					 0.5 + w*a.percentage - radius, h);
+		cr.line_to  (0.5, h);
+		cr.line_to  (0.5, 0);
 		cr.fill_preserve ();
 		cr.set_source_rgb (0.3, 0.3, 0.3);
 		cr.stroke ();
