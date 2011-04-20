@@ -7,10 +7,12 @@ class Creeper.Activity {
 	public double time { get; private set; }
 	public float percentage    { get; private set; default = 0.5f; }
 	public Wnck.Application app { get; private set; }
+	public Gdk.Pixbuf icon { get; private set; }
 
 	public Activity.from_app (Wnck.Application a) {
 		app = a;
 		name = app.get_name ();
+		icon = app.get_icon ();
 		timer = new Timer ();
 		timer.stop ();
 		time = 0;
