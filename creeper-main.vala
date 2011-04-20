@@ -6,7 +6,7 @@ class Creeper.MainWindow {
 
 	private Gtk.Builder builder;
 	private Gtk.Window window;
-	private Gtk.Toolbar toolbar;
+
 	private Wnck.Screen screen;
 	private Creeper.ActivitiesView view;
 
@@ -25,10 +25,8 @@ class Creeper.MainWindow {
 			error ("Unable to load UI file: " + e.message);
 		}
 		window = builder.get_object ("window1") as Gtk.Window;
-		toolbar = builder.get_object ("toolbar1") as Gtk.Toolbar;
 		var table = builder.get_object ("table2") as Gtk.Table;
 
-		toolbar.get_style_context ().add_class (Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
 		view = new ActivitiesView (table);
 		window.destroy.connect (Gtk.main_quit);
 

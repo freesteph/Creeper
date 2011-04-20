@@ -58,24 +58,9 @@ class Creeper.ActivitiesView {
 		int w = widget.get_allocated_width ();
 		int h = widget.get_allocated_height ();
 
-		int radius = w / 40;
 		cr.set_line_width (1);
 		cr.set_source_rgb (0.5, 0.5, 0.5);
-		/* since our line-width is 1, and that cairo move_to() defines
-		   where the _center_ of the line is, we need to add an offset 
-		   of half that line-width, otherwise Cairo will eat the pixels
-		   on the side. The offset makes it use a full pixel. I think. */
-		cr.move_to  (0.5, 0);
-		cr.line_to  (0.5 + w*percentage - radius, 0);
-		cr.curve_to (0.5 + w*percentage - radius, 0,
-					 0.5 + w*percentage, 0,
-					 0.5 + w*percentage, radius);
-		cr.line_to  (0.5 + w*percentage, h - radius);
-		cr.curve_to (0.5 + w*percentage, h - radius,
-					 0.5 + w*percentage, h,
-					 0.5 + w*percentage - radius, h);
-		cr.line_to  (0.5, h);
-		cr.line_to  (0.5, 0);
+		cr.rectangle (0, 0, w*percentage, h); 
 		cr.fill_preserve ();
 		cr.set_source_rgb (0.3, 0.3, 0.3);
 		cr.stroke ();
