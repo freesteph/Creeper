@@ -4,6 +4,7 @@ class Creeper.Activity {
 	public string name         { get; private set; }
 	public string command_name { get; private set; }
 	public Timer timer;
+	public double time { get; private set; }
 	public float percentage    { get; private set; default = 0.5f; }
 	public Wnck.Application app { get; private set; }
 
@@ -12,14 +13,16 @@ class Creeper.Activity {
 		name = app.get_name ();
 		timer = new Timer ();
 		timer.stop ();
+		time = 0;
 	}
 
 	public void start () {
-		timer.start ();
+		timer.continue ();
 	}
 
 	public void pause () {
 		timer.stop ();
+		time = timer.elapsed ();
 	}
 
 	public string to_string () {

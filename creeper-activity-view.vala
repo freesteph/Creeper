@@ -11,7 +11,7 @@ class Creeper.ActivitiesView {
 		table.resize (rows, columns);
 	}
 
-	public void render_row (Activity a, int index) {
+	public void render_row (Activity a, int index, double percentage) {
 
 		Gdk.Pixbuf icon = a.app.get_icon ();
 
@@ -19,6 +19,7 @@ class Creeper.ActivitiesView {
 		var app_box   = new Gtk.HBox (false, 0);
 		var app_label = new Gtk.Label (a.name);
 		var app_icon  = new Gtk.Image.from_pixbuf (icon);
+
 		app_label.set_alignment (1, 0);
 		app_label.xpad = 12;
 		app_label.ypad = 6;
@@ -28,7 +29,8 @@ class Creeper.ActivitiesView {
 
 		/* progress bar and percentage */
 		var area   = new Gtk.DrawingArea ();
-		var label  = new Gtk.Label (@"$(a.percentage*100)%");
+		var labelstr = "%3.0f".printf (percentage*100);
+		var label  = new Gtk.Label (labelstr);
 
 		/* attach them all */
 		table.attach (app_box, 0, 1, index, index+1,
@@ -44,7 +46,7 @@ class Creeper.ActivitiesView {
 					  Gtk.AttachOptions.SHRINK,
 					  12, 12);
 		area.draw.connect ( (w, cr ) => {
-				return render_progress (w, cr, a);
+				return render_progress (w, cr, a, percentage);
 			});
 	}
 
@@ -52,7 +54,7 @@ class Creeper.ActivitiesView {
 		table.show_all ();
 	}
 
-	public bool render_progress (Gtk.Widget widget, Cairo.Context cr, Activity a) {
+	public bool render_progress (Gtk.Widget widget, Cairo.Context cr, Activity a, double percentage) {
 		int w = widget.get_allocated_width ();
 		int h = widget.get_allocated_height ();
 
@@ -64,14 +66,14 @@ class Creeper.ActivitiesView {
 		   of half that line-width, otherwise Cairo will eat the pixels
 		   on the side. The offset makes it use a full pixel. I think. */
 		cr.move_to  (0.5, 0);
-		cr.line_to  (0.5 + w*a.percentage - radius, 0);
-		cr.curve_to (0.5 + w*a.percentage - radius, 0,
-					 0.5 + w*a.percentage, 0,
-					 0.5 + w*a.percentage, radius);
-		cr.line_to  (0.5 + w*a.percentage, h - radius);
-		cr.curve_to (0.5 + w*a.percentage, h - radius,
-					 0.5 + w*a.percentage, h,
-					 0.5 + w*a.percentage - radius, h);
+		cr.line_to  (0.5 + w*percentage - radius, 0);
+		cr.curve_to (0.5 + w*percentage - radius, 0,
+					 0.5 + w*percentage, 0,
+					 0.5 + w*percentage, radius);
+		cr.line_to  (0.5 + w*percentage, h - radius);
+		cr.curve_to (0.5 + w*percentage, h - radius,
+					 0.5 + w*percentage, h,
+					 0.5 + w*percentage - radius, h);
 		cr.line_to  (0.5, h);
 		cr.line_to  (0.5, 0);
 		cr.fill_preserve ();

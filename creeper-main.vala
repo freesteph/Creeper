@@ -10,6 +10,8 @@ class Creeper.MainWindow {
 	private Wnck.Screen screen;
 	private Creeper.ActivitiesView view;
 
+	private Timer timer_today;
+
 	private Activity current_activity;
 	private Gee.ArrayList<Activity> activities;
 
@@ -30,13 +32,16 @@ class Creeper.MainWindow {
 		view = new ActivitiesView (table);
 		window.destroy.connect (Gtk.main_quit);
 
+		timer_today = new Timer ();
+
 		screen = Wnck.Screen.get_default ();
 		screen.active_window_changed.connect ( (screen, previous) =>
 			{
 				// stop previous activity
 				if (current_activity != null) {
-					debug ("Pausing previous activity");
 					current_activity.pause ();
+					debug (@"Pausing previous activity, ran for $(current_activity.time)");
+
 				}
 				// get current application
 				var win = screen.get_active_window ();
@@ -67,7 +72,6 @@ class Creeper.MainWindow {
 				current_activity.start ();
 				update_view ();
 			});
-		update_view ();
 	}
 
 	public bool add_activity (Activity a) {
@@ -78,20 +82,25 @@ class Creeper.MainWindow {
 
 	public static int compare_activities (Activity a, Activity b) {
 		if (a.timer.elapsed () > b.timer.elapsed ()) {
-			return 1;
-		} else if (a.timer.elapsed () < b.timer.elapsed ()) {
 			return -1;
-		} else{ 
+		} else if (a.timer.elapsed () < b.timer.elapsed ()) {
+			return 1;
+		} else { 
 			return 0;
 		}
 	}
 
 	public void update_view () {
-		debug ("Updating the view");
-		view.resize (activities.size, 3);
+		if (activities.size > 0) view.resize (activities.size, 3);
+		// would be nicer to just add and re-order activites
 		view.remove_all ();
+
+		debug ("Total running time : %3.3f".printf (timer_today.elapsed ()));
 		for (int i = 0; i < activities.size; i++) {
-			view.render_row (activities.get(i), i);
+			var perc = activities.get(i).timer.elapsed () / timer_today.elapsed ();
+			var str = "%3.2f".printf (perc);
+			debug (@"Activity $(activities.get(i)) has been running " + str + "% of the time");
+			view.render_row (activities.get(i), i, perc);
 		}
 		view.refresh ();
 	}
