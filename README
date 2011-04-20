@@ -6,3 +6,12 @@ instead of doing your work.
 
 It's a pretty simple project, that will hopefully turn 
 into a GNOME tutorial. It makes use of GTK3 and libwnck (soon).
+
+== Build instructions ==
+The program is made with Vala, GTK+3, Gee, and Libwnck3.
+
+If Vala can't find libwnck-3.0 (like in my Fedora 15), generate it by
+installing libwnck3.0-devel and then generating the .vapi file:
+
+cd /usr/share/gir-1.0/
+vapigen --library libwnck-3.0 -d /usr/share/vala-0.12/vapi/ Wnck-3.0.gir --pkg gtk+-3.0

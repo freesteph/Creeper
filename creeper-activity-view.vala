@@ -29,7 +29,7 @@ class Creeper.ActivitiesView {
 		var area   = new Gtk.DrawingArea ();
 		var elapsed = make_time_look_good (a.timer.elapsed ());
 		var label  = new Gtk.Label (elapsed);
-		label.set_alignment (1, 0);
+		label.set_justify (Gtk.Justification.RIGHT);
 
 		/* attach them all */
 		table.attach (app_box, 0, 1, index, index+1,
