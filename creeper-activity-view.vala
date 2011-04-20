@@ -16,6 +16,8 @@ class Creeper.ActivitiesView {
 		/* Label + icon for the application */
 		var app_box   = new Gtk.HBox (false, 0);
 		var app_label = new Gtk.Label (a.name);
+		/* FIXME: the ellipsize looks bad (ex: eog). Truncate ourselves? */
+		if (a.name.length > 20) app_label.set_ellipsize (Pango.EllipsizeMode.END);
 		var app_icon  = new Gtk.Image.from_pixbuf (a.icon);
 
 		app_label.set_alignment (1, 0);
