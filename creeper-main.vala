@@ -41,31 +41,29 @@ class Creeper.MainWindow {
 				if (current_activity != null) {
 					current_activity.pause ();
 					debug (@"Pausing previous activity, ran for $(current_activity.time)");
-
 				}
+
 				// get current application
 				var win = screen.get_active_window ();
 				if (win == null) return;
 
 				var app = win.get_application ();
 
-				// do I have to do this stupid scholar code?
-				bool found = false; int i = 0;
+				int i = 0;
+				bool found = false;
 				while (i < activities.size && !found) {
 					var a = activities.get (i);
-					if (a.name == app.get_name ()) {
+					if (a.app == app) {
 						current_activity = a;
 						found = true;
 					}
 					i++;
 				}
 
-				if (i >= activities.size) {
+				if (!found) {
 					current_activity = new Activity.from_app (app);
 					add_activity (current_activity);
 					debug (@"Created new activity: $current_activity");
-				} else {
-					current_activity = activities.get (i);
 				}
 
 				debug (@"Switched to: $current_activity");
@@ -76,7 +74,6 @@ class Creeper.MainWindow {
 
 	public bool add_activity (Activity a) {
 		activities.add (a);
-		activities.sort ((CompareFunc)(compare_activities));
 		return true;
 	}
 
@@ -92,6 +89,8 @@ class Creeper.MainWindow {
 
 	public void update_view () {
 		if (activities.size > 0) view.resize (activities.size, 3);
+		activities.sort ((CompareFunc)(compare_activities));
+
 		// would be nicer to just add and re-order activites
 		view.remove_all ();
 
