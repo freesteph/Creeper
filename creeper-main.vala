@@ -35,41 +35,42 @@ class Creeper.MainWindow {
 		timer_today = new Timer ();
 
 		screen = Wnck.Screen.get_default ();
-		screen.active_window_changed.connect ( (screen, previous) =>
-			{
-				// stop previous activity
-				if (current_activity != null) {
-					current_activity.pause ();
-					debug (@"Pausing previous activity, ran for $(current_activity.time)");
-				}
+		screen.active_window_changed.connect (_on_active_window_changed);
+	}
+	public void _on_active_window_changed (Wnck.Screen screen, Wnck.Window prev) {
+		// stop previous activity
+		if (current_activity != null) {
+			current_activity.pause ();
+			debug (@"Pausing previous activity, ran for $(current_activity.time)");
+		}
 
-				// get current application
-				var win = screen.get_active_window ();
-				if (win == null) return;
+		// get current application
+		var win = screen.get_active_window ();
+		if (win == null) return;
 
-				var app = win.get_application ();
+		var app = win.get_application ();
 
-				int i = 0;
-				bool found = false;
-				while (i < activities.size && !found) {
-					var a = activities.get (i);
-					if (a.app == app) {
-						current_activity = a;
-						found = true;
-					}
-					i++;
-				}
+		int i = 0;
+		bool found = false;
+		while (i < activities.size && !found) {
+			var a = activities.get (i);
+			if (a.app == app) {
+				current_activity = a;
+				found = true;
+			}
+			i++;
+		}
 
-				if (!found) {
-					current_activity = new Activity.from_app (app);
-					add_activity (current_activity);
-					debug (@"Created new activity: $current_activity");
-				}
+		if (!found) {
+			current_activity = new Activity.from_app (app);
+			add_activity (current_activity);
+			debug (@"Created new activity: $current_activity");
+		}
 
-				debug (@"Switched to: $current_activity");
-				current_activity.start ();
-				update_view ();
-			});
+		debug (@"Switched to: $current_activity");
+		current_activity.start ();
+		update_view ();
+		return;
 	}
 
 	public bool add_activity (Activity a) {
