@@ -60,7 +60,7 @@ class Creeper.ActivitiesView {
 		cr.set_line_width (1);
 		cr.set_source_rgb (0.5, 0.5, 0.5);
 		/* since our line-width is 1, and that cairo move_to() defines
-		   where the _center_ of the line is, we need to add an offset 
+		   where the _center_ of the line is, we need to add an offset
 		   of half that line-width, otherwise Cairo will eat the pixels
 		   on the side. The offset makes it use a full pixel. I think. */
 		cr.move_to  (0.5, 0);
@@ -77,7 +77,7 @@ class Creeper.ActivitiesView {
 		cr.fill_preserve ();
 		cr.set_source_rgb (0.3, 0.3, 0.3);
 		cr.stroke ();
-	 	return false;
+		return false;
 	 }
 
 	public void remove_all () {

@@ -83,7 +83,7 @@ class Creeper.MainWindow {
 			return -1;
 		} else if (a.timer.elapsed () < b.timer.elapsed ()) {
 			return 1;
-		} else { 
+		} else {
 			return 0;
 		}
 	}
@@ -123,5 +123,4 @@ class Creeper.MainWindow {
 			});
 		return app.run (args);
 	}
-}		
-
+}
