@@ -27,8 +27,9 @@ class Creeper.ActivitiesView {
 
 		/* progress bar and percentage */
 		var area   = new Gtk.DrawingArea ();
-		var labelstr = "%3.0f".printf (percentage*100);
-		var label  = new Gtk.Label (labelstr + "%"); // FIXME
+		var elapsed = make_time_look_good (a.timer.elapsed ());
+		var label  = new Gtk.Label (elapsed);
+		label.set_alignment (1, 0);
 
 		/* attach them all */
 		table.attach (app_box, 0, 1, index, index+1,
@@ -48,6 +49,18 @@ class Creeper.ActivitiesView {
 			});
 	}
 
+	public string make_time_look_good (double time) {
+		var h = (int) time/3600;
+		var m = (int) ((time - h * 3600)/60);
+		var s = (int) (time - (h*3600) - (m*60));
+
+		string result = "";
+		if (h != 0) result += @"$(h)h";
+		if (m != 0) result += @"$(m)m";
+		result += @"$(s)s";
+		return result;
+	}
+
 	public void refresh () {
 		table.show_all ();
 	}
@@ -56,12 +69,19 @@ class Creeper.ActivitiesView {
 		int w = widget.get_allocated_width ();
 		int h = widget.get_allocated_height ();
 
+		// printf ("%%") = "%"
+		// cause not everybody knows, you know.
+		var labelstr = "%3.0f%%".printf (percentage*100);
+
 		cr.set_line_width (1);
 		cr.set_source_rgb (0.5, 0.5, 0.5);
 		cr.rectangle (0, 0, w*percentage, h); 
 		cr.fill_preserve ();
 		cr.set_source_rgb (0.3, 0.3, 0.3);
 		cr.stroke ();
+
+		cr.move_to (w*percentage + 12, h/2);
+		cr.show_text (labelstr);
 		return false;
 	 }
 
