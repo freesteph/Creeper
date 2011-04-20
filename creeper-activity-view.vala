@@ -13,12 +13,10 @@ class Creeper.ActivitiesView {
 
 	public void render_row (Activity a, int index, double percentage) {
 
-		Gdk.Pixbuf icon = a.app.get_icon ();
-
 		/* Label + icon for the application */
 		var app_box   = new Gtk.HBox (false, 0);
 		var app_label = new Gtk.Label (a.name);
-		var app_icon  = new Gtk.Image.from_pixbuf (icon);
+		var app_icon  = new Gtk.Image.from_pixbuf (a.icon);
 
 		app_label.set_alignment (1, 0);
 		app_label.xpad = 12;
@@ -30,7 +28,7 @@ class Creeper.ActivitiesView {
 		/* progress bar and percentage */
 		var area   = new Gtk.DrawingArea ();
 		var labelstr = "%3.0f".printf (percentage*100);
-		var label  = new Gtk.Label (labelstr);
+		var label  = new Gtk.Label (labelstr + "%"); // FIXME
 
 		/* attach them all */
 		table.attach (app_box, 0, 1, index, index+1,
@@ -64,7 +62,7 @@ class Creeper.ActivitiesView {
 		cr.fill_preserve ();
 		cr.set_source_rgb (0.3, 0.3, 0.3);
 		cr.stroke ();
-	 	return false;
+		return false;
 	 }
 
 	public void remove_all () {

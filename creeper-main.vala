@@ -33,41 +33,47 @@ class Creeper.MainWindow {
 		timer_today = new Timer ();
 
 		screen = Wnck.Screen.get_default ();
-		screen.active_window_changed.connect ( (screen, previous) =>
+		screen.active_window_changed.connect (_on_active_window_changed);
+		screen.window_stacking_changed.connect ( (screen) =>
 			{
-				// stop previous activity
-				if (current_activity != null) {
-					current_activity.pause ();
-					debug (@"Pausing previous activity, ran for $(current_activity.time)");
-				}
-
-				// get current application
-				var win = screen.get_active_window ();
-				if (win == null) return;
-
-				var app = win.get_application ();
-
-				int i = 0;
-				bool found = false;
-				while (i < activities.size && !found) {
-					var a = activities.get (i);
-					if (a.app == app) {
-						current_activity = a;
-						found = true;
-					}
-					i++;
-				}
-
-				if (!found) {
-					current_activity = new Activity.from_app (app);
-					add_activity (current_activity);
-					debug (@"Created new activity: $current_activity");
-				}
-
-				debug (@"Switched to: $current_activity");
-				current_activity.start ();
-				update_view ();
+				//FIXME: null is bad
+				_on_active_window_changed (screen, null);
 			});
+	}
+	public void _on_active_window_changed (Wnck.Screen screen, Wnck.Window? prev) {
+		// stop previous activity
+		if (current_activity != null) {
+			current_activity.pause ();
+			debug (@"Pausing previous activity, ran for $(current_activity.time)");
+		}
+
+		// get current application
+		var win = screen.get_active_window ();
+		if (win == null) return;
+
+		var app = win.get_application ();
+
+		int i = 0;
+		bool found = false;
+		while (i < activities.size && !found) {
+			var a = activities.get (i);
+			if (a.app == app) {
+				current_activity = a;
+				found = true;
+			}
+			i++;
+		}
+
+		if (!found) {
+			current_activity = new Activity.from_app (app);
+			add_activity (current_activity);
+			debug (@"Created new activity: $current_activity");
+		}
+
+		debug (@"Switched to: $current_activity");
+		current_activity.start ();
+		update_view ();
+		return;
 	}
 
 	public bool add_activity (Activity a) {
@@ -80,7 +86,7 @@ class Creeper.MainWindow {
 			return -1;
 		} else if (a.timer.elapsed () < b.timer.elapsed ()) {
 			return 1;
-		} else { 
+		} else {
 			return 0;
 		}
 	}
@@ -120,5 +126,4 @@ class Creeper.MainWindow {
 			});
 		return app.run (args);
 	}
-}		
-
+}
