@@ -36,8 +36,13 @@ class Creeper.MainWindow {
 
 		screen = Wnck.Screen.get_default ();
 		screen.active_window_changed.connect (_on_active_window_changed);
+		screen.window_stacking_changed.connect ( (screen) =>
+			{
+				//FIXME: null is bad
+				_on_active_window_changed (screen, null);
+			});
 	}
-	public void _on_active_window_changed (Wnck.Screen screen, Wnck.Window prev) {
+	public void _on_active_window_changed (Wnck.Screen screen, Wnck.Window? prev) {
 		// stop previous activity
 		if (current_activity != null) {
 			current_activity.pause ();
