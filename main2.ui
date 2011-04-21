@@ -43,6 +43,25 @@
                   <object class="GtkTreeViewColumn" id="rank-column">
                     <property name="spacing">6</property>
                     <property name="title" translatable="yes">Rank</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="render_rank"/>
+                      <attributes>
+                        <attribute name="xpad">6</attribute>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="icon-column">
+                    <property name="title" translatable="yes">Icon</property>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="render_icon"/>
+                      <attributes>
+                        <attribute name="ypad">12</attribute>
+                        <attribute name="pixbuf">1</attribute>
+                      </attributes>
+                    </child>
                   </object>
                 </child>
               </object>
