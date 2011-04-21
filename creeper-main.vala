@@ -8,7 +8,7 @@ class Creeper.MainWindow {
 	private Gtk.Window window;
 	private Gtk.TreeView tree;
 
-	private Gtk.ListStore activities_store;
+	private Gtk.ListStore store;
 
 	private Wnck.Screen screen;
 	private Creeper.ActivitiesTree view;
@@ -30,11 +30,11 @@ class Creeper.MainWindow {
 
 		window = builder.get_object ("window1") as Gtk.Window;
 		tree   = builder.get_object ("treeview1") as Gtk.TreeView;
-		activities_store = builder.get_object ("activitiesstore") as Gtk.ListStore;
+		store = builder.get_object ("activitiesstore") as Gtk.ListStore;
 
 		window.destroy.connect (Gtk.main_quit);
 
-		view = new ActivitiesTree (tree);
+		view = new ActivitiesTree (builder);
 		timer_today = new Timer ();
 
 		screen = Wnck.Screen.get_default ();
@@ -78,35 +78,31 @@ class Creeper.MainWindow {
 
 		debug (@"Switched to: $current_activity");
 		current_activity.start ();
-		view.update ();
+		update_store ();
+		//view.update ();
 		return;
+	}
+
+	public void update_store () {
+		store.clear ();
+		activities.sort ((CompareFunc) compare_activities);
+		foreach (Activity a in activities) {
+			Gtk.TreeIter iter;
+			store.append (out iter);
+			store.set (iter,
+					   0, activities.index_of (a) + 1,
+					   1, a.icon,
+					   2, a.name,
+					   3, a.strtime,
+					   -1);
+		}
 	}
 
 	public bool add_activity (Activity a) {
 		activities.add (a);
 		activities.sort ((CompareFunc) compare_activities);
-
-		Gtk.TreeIter iter;
-		activities_store.append (out iter);
-		activities_store.set (iter, 
-							  0, activities.index_of (a) + 1,
-							  1, a.icon,
-							  2, a.name,
-							  3, make_time_look_good (a.time),
-							  -1);
+		update_store ();
 		return true;
-	}
-
-	public string make_time_look_good (double time) {
-		var h = (int) time/3600;
-		var m = (int) ((time - h * 3600)/60);
-		var s = (int) (time - (h*3600) - (m*60));
-
-		string result = "";
-		if (h != 0) result += @"$(h)h";
-		if (m != 0) result += @"$(m)m";
-		result += @"$(s)s";
-		return result;
 	}
 
 	public static int compare_activities (Activity a, Activity b) {

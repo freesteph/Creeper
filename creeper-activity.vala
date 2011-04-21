@@ -1,10 +1,11 @@
 
-class Creeper.Activity {
+class Creeper.Activity : GLib.Object {
 
 	public string name         { get; private set; }
 	public string command_name { get; private set; }
 	public Timer timer;
 	public double time { get; private set; }
+	public string strtime { get; private set; default = "0s"; }
 	public float percentage    { get; private set; default = 0.5f; }
 	public Wnck.Application app { get; private set; }
 	public Gdk.Pixbuf icon { get; private set; }
@@ -16,6 +17,10 @@ class Creeper.Activity {
 		timer = new Timer ();
 		timer.stop ();
 		time = 0;
+		this.notify["time"].connect ((s, p) =>
+			{
+				strtime = format_time (time);
+			});
 	}
 
 	public void start () {
@@ -29,5 +34,17 @@ class Creeper.Activity {
 
 	public string to_string () {
 		return @"$(this.name)";
+	}
+
+	public string format_time (double time) {
+		var h = (int) time/3600;
+		var m = (int) ((time - h * 3600)/60);
+		var s = (int) (time - (h*3600) - (m*60));
+
+		string result = "";
+		if (h != 0) result += @"$(h)h";
+		if (m != 0) result += @"$(m)m";
+		result += @"$(s)s";
+		return result;
 	}
 }
