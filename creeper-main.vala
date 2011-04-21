@@ -23,7 +23,7 @@ class Creeper.MainWindow {
 
 		builder = new Gtk.Builder ();
 		try {
-			builder.add_from_file ("main2.ui");
+			builder.add_from_file ("main.ui");
 		} catch (Error e) {
 			error ("Unable to load UI file: " + e.message);
 		}
