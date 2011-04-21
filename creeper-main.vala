@@ -6,9 +6,12 @@ class Creeper.MainWindow {
 
 	private Gtk.Builder builder;
 	private Gtk.Window window;
+	private Gtk.TreeView tree;
+
+	private Gtk.ListStore activities_store;
 
 	private Wnck.Screen screen;
-	private Creeper.ActivitiesView view;
+	private Creeper.ActivitiesTree view;
 
 	private Timer timer_today;
 
@@ -20,16 +23,18 @@ class Creeper.MainWindow {
 
 		builder = new Gtk.Builder ();
 		try {
-			builder.add_from_file ("main.ui");
+			builder.add_from_file ("main2.ui");
 		} catch (Error e) {
 			error ("Unable to load UI file: " + e.message);
 		}
-		window = builder.get_object ("window1") as Gtk.Window;
-		var table = builder.get_object ("table2") as Gtk.Table;
 
-		view = new ActivitiesView (table);
+		window = builder.get_object ("window1") as Gtk.Window;
+		tree   = builder.get_object ("treeview1") as Gtk.TreeView;
+		activities_store = builder.get_object ("activitiesstore") as Gtk.ListStore;
+
 		window.destroy.connect (Gtk.main_quit);
 
+		view = new ActivitiesTree (tree);
 		timer_today = new Timer ();
 
 		screen = Wnck.Screen.get_default ();
@@ -40,6 +45,7 @@ class Creeper.MainWindow {
 				_on_active_window_changed (screen, null);
 			});
 	}
+
 	public void _on_active_window_changed (Wnck.Screen screen, Wnck.Window? prev) {
 		// stop previous activity
 		if (current_activity != null) {
@@ -72,13 +78,35 @@ class Creeper.MainWindow {
 
 		debug (@"Switched to: $current_activity");
 		current_activity.start ();
-		update_view ();
+		view.update ();
 		return;
 	}
 
 	public bool add_activity (Activity a) {
 		activities.add (a);
+		activities.sort ((CompareFunc) compare_activities);
+
+		Gtk.TreeIter iter;
+		activities_store.append (out iter);
+		activities_store.set (iter, 
+							  0, activities.index_of (a) + 1,
+							  1, a.icon,
+							  2, a.name,
+							  3, make_time_look_good (a.time),
+							  -1);
 		return true;
+	}
+
+	public string make_time_look_good (double time) {
+		var h = (int) time/3600;
+		var m = (int) ((time - h * 3600)/60);
+		var s = (int) (time - (h*3600) - (m*60));
+
+		string result = "";
+		if (h != 0) result += @"$(h)h";
+		if (m != 0) result += @"$(m)m";
+		result += @"$(s)s";
+		return result;
 	}
 
 	public static int compare_activities (Activity a, Activity b) {
@@ -89,23 +117,6 @@ class Creeper.MainWindow {
 		} else {
 			return 0;
 		}
-	}
-
-	public void update_view () {
-		if (activities.size > 0) view.resize (activities.size, 3);
-		activities.sort ((CompareFunc)(compare_activities));
-
-		// would be nicer to just add and re-order activites
-		view.remove_all ();
-
-		debug ("Total running time : %3.3f".printf (timer_today.elapsed ()));
-		for (int i = 0; i < activities.size; i++) {
-			var perc = activities.get(i).timer.elapsed () / timer_today.elapsed ();
-			var str = "%3.2f".printf (perc);
-			debug (@"Activity $(activities.get(i)) has been running " + str + "% of the time");
-			view.render_row (activities.get(i), i, perc);
-		}
-		view.refresh ();
 	}
 
 	public void run () {
