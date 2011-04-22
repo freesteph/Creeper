@@ -1,0 +1,7 @@
+- Add a creepy icon ;
+- Non-recursive Make ;
+- Daemonize (creeper & creeper-gui)
+- Zeitgeist (in-app tracking) ;
+- Better UI (put percentage under the app name) ;
+- Correctly set the name (capitalization) ;
+- Saving applications runtimes
