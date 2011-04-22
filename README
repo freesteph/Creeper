@@ -1,17 +1,23 @@
-= Creeper =
+===========
+| Creeper |
+===========
 
 Creeper is a simple tracking application that tells you
 how much time you spent procrastinating on other applications
 instead of doing your work.
 
-It's a pretty simple project, that will hopefully turn 
-into a GNOME tutorial. It makes use of GTK3 and libwnck (soon).
-
-== Build instructions ==
-The program is made with Vala, GTK+3, Gee, and Libwnck3.
+======================
+| Build instructions |
+======================
+The program depends on:
+- gtk+-3.0
+- valac-0.12
+- gee-1.0
+- libwnck-3.0
+Fedora 15: yum install gtk3-devel libgee-devel libwnck3-devel vala
+Ubuntu 11.04: haven't figured it out yet.
 
 If Vala can't find libwnck-3.0 (like in my Fedora 15), generate it by
 installing libwnck3.0-devel and then generating the .vapi file:
-
 cd /usr/share/gir-1.0/
 vapigen --library libwnck-3.0 -d /usr/share/vala-0.12/vapi/ Wnck-3.0.gir --pkg gtk+-3.0
