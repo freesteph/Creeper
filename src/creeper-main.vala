@@ -23,12 +23,14 @@ class Creeper.MainWindow {
 	private Activity current_activity;
 	private Gee.ArrayList<Activity> activities;
 
+	const string UI_FILE = Config.PACKAGE_DATA_DIR + "/creeper/ui/main.ui";
+
 	public MainWindow () {
 		activities = new Gee.ArrayList<Activity> ();
 
 		builder = new Gtk.Builder ();
 		try {
-			builder.add_from_file ("main.ui");
+			builder.add_from_file (UI_FILE);
 		} catch (Error e) {
 			error ("Unable to load UI file: " + e.message);
 		}
