@@ -68,7 +68,7 @@ class Creeper.MainWindow {
 		bool found = false;
 		while (i < activities.size && !found) {
 			var a = activities.get (i);
-			if (a.app == app) {
+			if (a.app.get_name () == app.get_name ()) {
 				current_activity = a;
 				found = true;
 			}
@@ -129,7 +129,7 @@ class Creeper.MainWindow {
 	}
 
 	public static int main(string []args) {
-		var app = new Gtk.Application ("org.gnome.creeper", 0);
+		var app = new Gtk.Application ("org.gnome.Creeper", 0);
 		app.activate.connect ( () => {
 				weak GLib.List list = app.get_windows ();
 				if (list == null) {
