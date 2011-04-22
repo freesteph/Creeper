@@ -41,12 +41,12 @@
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="rank-column">
-                    <property name="spacing">6</property>
                     <property name="title" translatable="yes">Rank</property>
                     <child>
-                      <object class="GtkCellRendererText" id="render-rank"/>
+                      <object class="GtkCellRendererText" id="render-rank">
+                        <property name="xpad">12</property>
+                      </object>
                       <attributes>
-                        <attribute name="xpad">6</attribute>
                         <attribute name="text">0</attribute>
                       </attributes>
                     </child>
