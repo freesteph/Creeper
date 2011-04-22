@@ -31,64 +31,80 @@
             <property name="can_focus">True</property>
             <property name="scrollable">True</property>
             <child>
-              <object class="GtkTreeView" id="treeview1">
+              <object class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="model">activitiesstore</property>
-                <property name="headers_visible">False</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="treeview-selection1"/>
-                </child>
+                <property name="min_content_width">420</property>
+                <property name="min_content_height">200</property>
                 <child>
-                  <object class="GtkTreeViewColumn" id="rank-column">
-                    <property name="title" translatable="yes">Rank</property>
+                  <object class="GtkViewport" id="viewport1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkCellRendererText" id="render-rank">
-                        <property name="xpad">6</property>
+                      <object class="GtkTreeView" id="treeview1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="model">activitiesstore</property>
+                        <property name="headers_visible">False</property>
+                        <property name="headers_clickable">False</property>
+                        <property name="search_column">0</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection"/>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="rank-column">
+                            <property name="title" translatable="yes">Rank</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="render-rank">
+                                <property name="xpad">6</property>
+                              </object>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="name">
+                            <property name="title" translatable="yes">Application</property>
+                            <child>
+                              <object class="GtkCellRendererPixbuf" id="render-icon"/>
+                              <attributes>
+                                <attribute name="pixbuf">1</attribute>
+                              </attributes>
+                            </child>
+                            <child>
+                              <object class="GtkCellRendererText" id="render-name">
+                                <property name="ypad">12</property>
+                              </object>
+                              <attributes>
+                                <attribute name="markup">2</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="Time">
+                            <property name="title" translatable="yes">Time</property>
+                            <child>
+                              <object class="GtkCellRendererProgress" id="render-progress"/>
+                              <attributes>
+                                <attribute name="value">4</attribute>
+                              </attributes>
+                            </child>
+                            <child>
+                              <object class="GtkCellRendererText" id="render-time">
+                                <property name="xalign">1</property>
+                                <property name="alignment">right</property>
+                                <property name="style">oblique</property>
+                              </object>
+                              <attributes>
+                                <attribute name="text">3</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
                       </object>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="name">
-                    <property name="title" translatable="yes">Application</property>
-                    <child>
-                      <object class="GtkCellRendererPixbuf" id="render-icon"/>
-                      <attributes>
-                        <attribute name="pixbuf">1</attribute>
-                      </attributes>
-                    </child>
-                    <child>
-                      <object class="GtkCellRendererText" id="render-name">
-                        <property name="ypad">12</property>
-                      </object>
-                      <attributes>
-                        <attribute name="markup">2</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="Time">
-                    <property name="title" translatable="yes">Time</property>
-                    <child>
-                      <object class="GtkCellRendererProgress" id="render-progress"/>
-                      <attributes>
-                        <attribute name="value">4</attribute>
-                      </attributes>
-                    </child>
-                    <child>
-                      <object class="GtkCellRendererText" id="render-time">
-                        <property name="xalign">1</property>
-                        <property name="alignment">right</property>
-                        <property name="style">oblique</property>
-                      </object>
-                      <attributes>
-                        <attribute name="text">3</attribute>
-                      </attributes>
                     </child>
                   </object>
                 </child>
