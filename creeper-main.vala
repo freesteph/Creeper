@@ -1,3 +1,8 @@
+/* Creeper - a creepy application for your GNOME desktop
+ * © 2011 Stéphane Maniaci <stephane.maniaci@gmail.
+ * Licensed under GPLv3+.
+ */
+
 using Wnck;
 using Gee;
 using Gtk;
