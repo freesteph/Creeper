@@ -34,7 +34,7 @@
               <object class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="min_content_width">420</property>
+                <property name="min_content_width">450</property>
                 <property name="min_content_height">200</property>
                 <child>
                   <object class="GtkViewport" id="viewport1">
