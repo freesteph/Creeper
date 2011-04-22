@@ -92,10 +92,13 @@ class Creeper.MainWindow {
 			store.set (iter,
 					   0, activities.index_of (a) + 1,
 					   1, a.icon,
-					   2, a.name,
+					   2, "<b>" + a.name + "</b>",
 					   3, a.strtime,
+					   4, (a.timer.elapsed () / timer_today.elapsed () ) * 100,
 					   -1);
+
 		}
+
 	}
 
 	public bool add_activity (Activity a) {
