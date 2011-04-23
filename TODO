@@ -1,5 +1,6 @@
 - Add a creepy icon ;
 - Non-recursive Make ;
+- DRY, get the uipath variable from autotools ;
 - Daemonize (creeper & creeper-gui)
 - Zeitgeist (in-app tracking) ;
 - Better UI (put percentage under the app name) ;

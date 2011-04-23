@@ -32,10 +32,6 @@ class Creeper.Activity : GLib.Object {
 		time = timer.elapsed ();
 	}
 
-	public string to_string () {
-		return @"$(this.name)";
-	}
-
 	public string format_time (double time) {
 		var h = (int) time/3600;
 		var m = (int) ((time - h * 3600)/60);

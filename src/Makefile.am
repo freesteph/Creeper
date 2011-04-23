@@ -30,7 +30,8 @@ bin_PROGRAMS = creeper
 creeper_SOURCES = \
 	creeper-main.vala \
 	creeper-activity.vala \
-	creeper-activity-tree.vala
+	creeper-activity-tree.vala \
+	creeper-utils.vala
 
 creeper_LDFLAGS = \
 	-Wl,--export-dynamic

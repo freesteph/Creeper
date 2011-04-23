@@ -30,7 +30,11 @@ class Creeper.MainWindow {
 
 		builder = new Gtk.Builder ();
 		try {
-			builder.add_from_file (UI_FILE);
+			if (Utils.on_development ()) {
+				builder.add_from_file ("main.ui");
+			} else {
+				builder.add_from_file (UI_FILE);
+			}
 		} catch (Error e) {
 			error ("Unable to load UI file: " + e.message);
 		}
@@ -57,7 +61,6 @@ class Creeper.MainWindow {
 		// stop previous activity
 		if (current_activity != null) {
 			current_activity.pause ();
-			debug (@"Pausing previous activity, ran for $(current_activity.time)");
 		}
 
 		// get current application
@@ -80,13 +83,10 @@ class Creeper.MainWindow {
 		if (!found) {
 			current_activity = new Activity.from_app (app);
 			add_activity (current_activity);
-			debug (@"Created new activity: $current_activity");
 		}
 
-		debug (@"Switched to: $current_activity");
 		current_activity.start ();
 		update_store ();
-		//view.update ();
 		return;
 	}
 
