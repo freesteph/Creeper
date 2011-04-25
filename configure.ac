@@ -1,7 +1,11 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl Created by Anjuta application wizard.
 
-AC_INIT(creeper, 0.1)
+AC_INIT([Creeper],
+	[0.1],
+	[stephane.maniaci@gmail.com],
+	[creeper],
+	[http://freesteph.info])
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
 AC_SUBST([PACKAGE_NAME], ["$PACKAGE_NAME"])
