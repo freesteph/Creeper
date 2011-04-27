@@ -31,7 +31,8 @@ creeper_SOURCES = \
 	creeper-main.vala \
 	creeper-activity.vala \
 	creeper-activity-tree.vala \
-	creeper-utils.vala
+	creeper-utils.vala \
+	libwnck-3.0.vapi
 
 creeper_LDFLAGS = \
 	-Wl,--export-dynamic
